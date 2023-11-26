@@ -181,25 +181,6 @@ def test(args):
                 anomaly_map = torch.softmax(anomaly_map, dim=1)[:, 1, :, :]
                 anomaly_maps.append(anomaly_map.cpu().numpy())
             anomaly_map = np.sum(anomaly_maps, axis=0)
-
-            # few shot
-            if args.mode == 'few_shot':
-                image_features, patch_tokens = model.encode_image(image, few_shot_features)
-                anomaly_maps_few_shot = []
-                for idx, p in enumerate(patch_tokens):
-                    if 'ViT' in args.model:
-                        p = p[0, 1:, :]
-                    else:
-                        p = p[0].view(p.shape[1], -1).permute(1, 0).contiguous()
-                    cos = pairwise.cosine_similarity(mem_features[cls_name[0]][idx].cpu(), p.cpu())
-                    height = int(np.sqrt(cos.shape[1]))
-                    anomaly_map_few_shot = np.min((1 - cos), 0).reshape(1, 1, height, height)
-                    anomaly_map_few_shot = F.interpolate(torch.tensor(anomaly_map_few_shot),
-                                                         size=img_size, mode='bilinear', align_corners=True)
-                    anomaly_maps_few_shot.append(anomaly_map_few_shot[0].cpu().numpy())
-                anomaly_map_few_shot = np.sum(anomaly_maps_few_shot, axis=0)
-                anomaly_map = anomaly_map + anomaly_map_few_shot
-            
             results['anomaly_maps'].append(anomaly_map)
 
             # visualization
