@@ -133,7 +133,7 @@ def test(args):
     obj_list = test_data.get_cls_names()
 
     # few shot
-    if args.mode == 'few_shot' and (arg == 'k_shot' or arg == 'few_shot_features'):
+    if args.mode == 'few_shot':
         mem_features = memory(args.model, model, obj_list, dataset_dir, save_path, preprocess, transform,
                               args.k_shot, few_shot_features, dataset_name, device)
 
