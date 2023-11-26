@@ -45,7 +45,6 @@ def apply_ad_scoremap(image, scoremap, alpha=0.5):
 
 
 def cal_pro_score(masks, amaps, max_step=200, expect_fpr=0.3):
-    # ref: https://github.com/gudovskiy/cflow-ad/blob/master/train.py
     binary_amaps = np.zeros_like(amaps, dtype=bool)
     min_th, max_th = amaps.min(), amaps.max()
     delta = (max_th - min_th) / max_step
@@ -120,10 +119,10 @@ def test(args):
 
     # dataset
     transform = transforms.Compose([
-            transforms.Resize((img_size, img_size)),
-            transforms.CenterCrop(img_size),
-            transforms.ToTensor()
-        ])
+        transforms.Resize((img_size, img_size)),
+        transforms.CenterCrop(img_size),
+        transforms.ToTensor()
+    ])
     if dataset_name == 'mvtec':
         test_data = MVTecDataset(root=dataset_dir, transform=preprocess, target_transform=transform,
                                  aug_rate=-1, mode='test')
@@ -281,7 +280,8 @@ if __name__ == '__main__':
     parser.add_argument("--data_path", type=str, default="./data/visa", help="path to test dataset")
     parser.add_argument("--save_path", type=str, default='./results/tiaoshi', help='path to save results')
     parser.add_argument("--checkpoint_path", type=str, default='./exps/vit_huge_14/model_epoch12.pth', help='path to save results')
-    parser.add_argument("--config_path", type=str, default='./open_clip/model_configs/ViT-B-16.json', help="model configs")
+    parser.add_argument("--config_path", type=str, default='./
+
     # model
     parser.add_argument("--dataset", type=str, default='mvtec', help="test dataset")
     parser.add_argument("--model", type=str, default="ViT-B-16", help="model used")
