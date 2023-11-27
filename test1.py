@@ -50,7 +50,7 @@ def cal_pro_score(masks, amaps, max_step=200, expect_fpr=0.3):
     delta = (max_th - min_th) / max_step
     pros, fprs, ths = [], [], []
     for th in np.arange(min_th, max_th, delta):
-        binary_amaps[amaps <= th], binary_amaps[amaps > th] = 0, 1
+        binary_amaps[amaps <= th], binary_amaps[amaps > th] = 0, False
         pro = []
         for binary_amap, mask in zip(binary_amaps, masks):
             for region in measure.regionprops(measure.label(mask)):
